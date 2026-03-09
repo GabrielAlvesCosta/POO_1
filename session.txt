@@ -1,0 +1,46 @@
+def login():
+    if usuario and check_password_hash(usuario.get("senha"), senha):
+            session.clear()
+            flash("Login bem-sucedido!", "sucesso")
+            session["usuario_id"] = str(usuario.get("id"))
+            session["usuario_cpf"] = str(usuario.get("cpf"))
+            session["cargo"] = usuario.get("cargo", "comum")
+            return redirect(url_for("buscar_usuarios"))
+        else:
+            flash("CPF ou Senha incorretos!", "erro")
+            return render_template("login.html", campos=dados)
+    return render_template("login.html", campos={})
+
+
+def logout():
+    session.clear()
+    flash("Logout realizado com sucesso.", "sucesso")
+    return redirect(url_for("login"))
+
+@app.route("/usuarios", methods=["GET"])
+def buscar_usuarios():
+    
+    if "usuario_id" not in session:
+        flash("Acesso negado. Por favor, faça login.", "erro")
+        return redirect(url_for("login"))
+
+@app.route("/usuarios/editar/<cpf>", methods=["GET", "POST"])
+def editar_usuario(cpf):
+    if "usuario_id" not in session:
+        flash("Acesso negado. Por favor, faça login.", "erro")
+        return redirect(url_for("login"))
+
+    cpf_url_limpo = re.sub(r'\D', '', str(cpf))
+    cpf_sessao_limpo = re.sub(r'\D', '', str(session.get("usuario_cpf", "")))
+    eh_admin = session.get("cargo") == "admin"
+
+@app.route("/usuarios/deletar", methods=["GET", "POST"])
+def deletar_usuario():
+
+    if session.get("cargo") != "admin":
+        flash("Apenas administradores podem excluir usuários.", "erro")
+        return redirect(url_for('buscar_usuarios'))
+    
+    if "usuario_id" not in session:
+        flash("Não autorizado.", "erro")
+        return redirect(url_for("login"))
