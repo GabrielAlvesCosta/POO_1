@@ -3,12 +3,12 @@ import uuid# usado para gerar IDs únicos (uuid4
 #def são METODOS
 class Usuario:
     
-    def __init__(self, nome, cpf, email, idade, senha, cargo="comum"):
+    def __init__(self, nome, cpf_limpo, email, idade, senha, cargo="comum"):
         self.id = str(uuid.uuid4())
         self.nome = nome
-        self.cpf = cpf
+        self.cpf = cpf_limpo
         self.email = email
-        self.idade = idade
+        self.idade = int(idade)
         self.senha = senha
         self.cargo = cargo
 
@@ -30,6 +30,26 @@ class Usuario:
             }
     
 class SessaoUsuario:
+    @staticmethod
+    def login(usuario_dict):
+        session.clear()
+        session["usuario_id"] = str(usuario_dict.get("id"))
+        session["usuario_cpf"] = str(usuario_dict.get("cpf"))
+        session["cargo"] = usuario_dict.get("cargo", "comum")
+        session["usuario_nome"] = usuario_dict.get("nome", "Usuário")
 
-    def logout_POO(self):
-        session.clear(self)
+    @staticmethod
+    def logout():
+        session.clear()
+
+    @staticmethod
+    def esta_logado():
+        return "usuario_id" in session
+
+    @staticmethod
+    def eh_admin():
+        return session.get("cargo") == "admin"
+
+    @staticmethod
+    def obter_cpf():
+        return session.get("usuario_cpf", "")

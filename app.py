@@ -108,7 +108,7 @@ def cadastrar_usuario():
 
             # cria o objeto do usuário, incluindo um id UUID
         
-        if not eh_maior_de_idade():
+        if not Usuario.eh_maior_de_idade(usuario):
             flash("Usuário deve ser maior de idade.", "erro")
             return render_template("cadastro-usuario.html", campos=dados)
 
@@ -137,11 +137,8 @@ def login():
         usuario = next((u for u in usuarios if str(u.get("cpf")) == cpf_input), None)
 
         if usuario and check_password_hash(usuario.get("senha"), senha):
-            session.clear()
+            SessaoUsuario.login(usuario)
             flash("Login bem-sucedido!", "sucesso")
-            session["usuario_id"] = str(usuario.get("id"))
-            session["usuario_cpf"] = str(usuario.get("cpf"))
-            session["cargo"] = usuario.get("cargo", "comum")
             return redirect(url_for("buscar_usuarios"))
         else:
             flash("CPF ou Senha incorretos!", "erro")
@@ -212,7 +209,7 @@ def ordem_usuarios():
 
 @app.route("/logout")
 def logout():
-    session.clear()
+    SessaoUsuario.logout()
     flash("Logout realizado com sucesso.", "sucesso")
     return redirect(url_for("login"))
 
@@ -224,7 +221,7 @@ def buscar_usuarios_json():
 @app.route("/usuarios", methods=["GET"])
 def buscar_usuarios():
 
-    if "usuario_id" not in session:
+    if not SessaoUsuario.esta_logado():
         flash("Acesso negado. Por favor, faça login.", "erro")
         return redirect(url_for("login"))
         
@@ -233,13 +230,13 @@ def buscar_usuarios():
 
 @app.route("/usuarios/editar/<cpf>", methods=["GET", "POST"])
 def editar_usuario(cpf):
-    if "usuario_id" not in session:
+    if not SessaoUsuario.esta_logado():
         flash("Acesso negado. Por favor, faça login.", "erro")
         return redirect(url_for("login"))
 
     cpf_url_limpo = re.sub(r'\D', '', str(cpf))
-    cpf_sessao_limpo = re.sub(r'\D', '', str(session.get("usuario_cpf", "")))
-    eh_admin = session.get("cargo") == "admin"
+    cpf_sessao_limpo = re.sub(r'\D', '',str(SessaoUsuario.obter_cpf()))
+    eh_admin = SessaoUsuario.eh_admin()
 
     if not eh_admin and cpf_sessao_limpo != cpf_url_limpo:
         flash("Você só pode editar sua própria conta!", "erro")
@@ -307,11 +304,11 @@ def api_atualizar_usuario(cpf):
 @app.route("/usuarios/deletar", methods=["GET", "POST"])
 def deletar_usuario():
 
-    if session.get("cargo") != "admin":
+    if not SessaoUsuario.eh_admin():
         flash("Apenas administradores podem excluir usuários.", "erro")
         return redirect(url_for('buscar_usuarios'))
     
-    if "usuario_id" not in session:
+    if not SessaoUsuario.esta_logado():
         flash("Não autorizado.", "erro")
         return redirect(url_for("login"))
 
