@@ -3,7 +3,9 @@ import json
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
 import re
-from models.usuario import Usuario, SessaoUsuario
+from models.usuario import Usuario 
+from models.sessao_usuario import SessaoUsuario
+from models.validacao_usuario import ValidacaoCadastro
 
 app = Flask(__name__)
 # chave necessária para utilizar `flash` e sessões

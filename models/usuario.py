@@ -1,14 +1,13 @@
-from flask import session
 import uuid# usado para gerar IDs únicos (uuid4
 #def são METODOS
 class Usuario:
     
-    def __init__(self, nome, cpf_limpo, email, idade, senha, cargo="comum"):
+    def __init__(self, nome: str , cpf_limpo: str, email: str, idade: int, senha: str, cargo="comum"):
         self.id = str(uuid.uuid4())
         self.nome = nome
         self.cpf = cpf_limpo
         self.email = email
-        self.idade = int(idade)
+        self.idade = idade
         self.senha = senha
         self.cargo = cargo
 
@@ -29,27 +28,16 @@ class Usuario:
                 "cargo" : self.cargo
             }
     
-class SessaoUsuario:
-    @staticmethod
-    def login(usuario_dict):
-        session.clear()
-        session["usuario_id"] = str(usuario_dict.get("id"))
-        session["usuario_cpf"] = str(usuario_dict.get("cpf"))
-        session["cargo"] = usuario_dict.get("cargo", "comum")
-        session["usuario_nome"] = usuario_dict.get("nome", "Usuário")
-
-    @staticmethod
-    def logout():
-        session.clear()
-
-    @staticmethod
-    def esta_logado():
-        return "usuario_id" in session
-
-    @staticmethod
-    def eh_admin():
-        return session.get("cargo") == "admin"
-
-    @staticmethod
-    def obter_cpf():
-        return session.get("usuario_cpf", "")
+    @classmethod
+    def from_dict(cls, dados:ditc) -> "Usuario":
+        usuario         = cls.__new__(cls)
+        usuario.id      = dados.get("id", str(uuid.uuid4()))
+        usuario.cpf     = dados.get("cpf", " ")
+        usuario.nome    = dados.get("nome", "")
+        usuario.email   = dados.get("email", " ")
+        usuario.idade   = int(dados.get("idade", 0))
+        usuario.cargo   = dados.get("cargo", "comum")
+        return usuario
+    
+    def _repr_(self) -> str:
+        return f"<Usuario nome={self.nome} cpf={self.cpf} cargo={self.cargo}"
