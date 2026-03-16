@@ -29,7 +29,7 @@ class Usuario:
             }
     
     @classmethod
-    def from_dict(cls, dados:ditc) -> "Usuario":
+    def from_dict(cls, dados:dict) -> "Usuario":
         usuario         = cls.__new__(cls)
         usuario.id      = dados.get("id", str(uuid.uuid4()))
         usuario.cpf     = dados.get("cpf", " ")
