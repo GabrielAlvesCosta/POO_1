@@ -43,7 +43,7 @@ class RepositorioUsuarios:
             usuarios = self.listar()
             cpf_alvo = sanitizar_cpf(usuario_atualizado.cpf)
             for i, u in enumerate(usuarios):
-                if sanitiar_cpf(u.cpf) == cpf_alvo:
+                if sanitizar_cpf(u.cpf) == cpf_alvo:
                     usuarios[i] = usuario_atualizado
                     self.persistir(usuarios)
                     return True
