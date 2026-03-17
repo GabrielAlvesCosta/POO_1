@@ -4,7 +4,6 @@ import re
 # VEM DOS MODELS
 from models.usuario import Usuario 
 from models.repositorio import RepositorioUsuarios
-from models.validacao_usuario import ValidacaoCadastro
 from utils.validacoes import validar_formato_cpf, sanitizar_cpf
 # BLUEPRINT agrupa rotas
 auth_bp = Blueprint("auth", __name__)
@@ -29,7 +28,7 @@ def cadastrar_usuario():
     senha = request.form.get("senha")
     senha_hash = generate_password_hash(senha)
     cargo = request.form.get("cargo", "comum")
-# VALOR IDADE
+    # VALOR IDADE
     try:
         idade = int(request.form.get("idade", 0))
     except ValueError:
@@ -39,15 +38,15 @@ def cadastrar_usuario():
     if idade < 18:
         flash("Cadastro apenas para maiores de idade!", "erro")
         return redirect(url_for("auth.cadastrar_usuario"))
-# VALIDAR CPF
+    # VALIDAR CPF
     if not validar_formato_cpf(cpf_limpo):
         flash("CPF invalido! Use o formato: 000.000.000-00", "erro")
         return redirect(url_for("auth.cadastrar_usuario"))
-# UNICIDADE DO CPF
+    # UNICIDADE DO CPF
     if repo.cpf_existe(cpf_limpo):
         flash("CPF já cadastrado!", "erro")
         return redirect(url_for("auth.cadastrar_usuario"))
-# CRIAÇÂO  OBJETO DE PERSISTENCIA
+    # CRIAÇÂO  OBJETO DE PERSISTENCIA
     senha_hash = generate_password_hash(senha_hash)
     cpf_salvo = sanitizar_cpf(cpf_limpo)
 

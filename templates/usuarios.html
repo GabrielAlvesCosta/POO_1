@@ -74,12 +74,12 @@
                             
                             {% if session.get('cargo') == 'admin' or session.get('usuario_cpf')|string == usuario.cpf|string %}
                                 
-                                <a href="{{ url_for('editar_usuario', cpf=usuario.cpf) }}">
+                                <a href="{{ url_for('usuario.editar_usuario', cpf=usuario.cpf) }}">
                                     <button type="button" class="btn-editar">Editar</button>
                                 </a>
 
                                 {% if session.get('cargo') == 'admin' %}
-                                    <form action="{{ url_for('deletar_usuario') }}"
+                                    <form action="{{ url_for('usuario.deletar_usuario') }}"
                                           method="post"
                                           onsubmit="return confirm('Tem certeza que deseja deletar este usuário?');"
                                           style="display: inline;">
@@ -104,7 +104,7 @@
                 {% endfor %}
             </tbody>
         </table> 
-        <a href="/logout" class="sair">Sair</a>
+        <a href="{{ url_for('auth.logout') }}" class="sair">Sair</a>
     </div>
     
             
