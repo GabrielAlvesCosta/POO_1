@@ -40,11 +40,13 @@ def cadastrar_usuario():
             return redirect(url_for("auth.cadastrar_usuario"))
 # VALIDAR CPF
 
-        cpf_limpo = sanitizar_cpf(cpf)
+        
 
-        if not validar_formato_cpf(cpf_limpo):
+        if not validar_formato_cpf(cpf):
             flash("CPF invalido! Use o formato: 000.000.000-00", "erro")
             return redirect(url_for("auth.cadastrar_usuario"))
+        
+        cpf_limpo = sanitizar_cpf(cpf)
 # UNICIDADE DO CPF
         if repo.cpf_existe(cpf_limpo):
             flash("CPF já cadastrado!", "erro")
@@ -54,12 +56,13 @@ def cadastrar_usuario():
 
         novo_usuario = Usuario(nome, cpf_limpo, email, idade, senha_hash, cargo)
 
-        if repo.salva(novo_usuario):
+        if repo.salvar(novo_usuario):
             flash("Usuário Cadastrado com Sucesso!", "sucesso")
             return redirect(url_for("auth.login"))
         else:
             flash("Não foi possível cadastrar o Usuário!", "erro")
             return redirect(url_for("auth.cadastrar_usuario"))
+        
     return render_template("cadastro-usuario.html")
 # LOGIN
 @auth_bp.route("/login", methods=["GET", "POST"])
