@@ -6,4 +6,7 @@ def validar_formato_cpf(cpf: str) -> bool:
         return re.match(padrao, cpf) is not None
 
 def sanitizar_cpf(cpf: str) -> str:
-        return re.seb(r"[.\-]", "", "cpf")
+        if not cpf:
+                return ""
+        
+        return re.sub(r"[.\-]", "", cpf)
