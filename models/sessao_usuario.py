@@ -1,5 +1,4 @@
 #from flask import session
-
 class SessaoUsuario:
 
     def __init__(self, session):

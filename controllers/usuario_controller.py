@@ -49,6 +49,53 @@ def listar_usuarios_json():
         return jsonify({"erro" : "Não autorizado!"}), 401
     usuarios =  repo.listar()
     return jsonify({u.to_ditc() for u in usuarios})
+
+# EDIÇÂO
+@usuario_bp.route("/usuario/editar<cpf>", methods=["GET", "POST"])
+def editar_usuario():
+    if not _usuario_logado():
+        flash("Não autorizado!", "erro")
+        return redirect(url_for("auth_login"))
+    
+    usuario = repo.buscar_por_cpf(cpf)
+
+    if not usuario:
+        flash("Usuário não encontrado", "erro")
+        return redirect(url_for("usuario.listar_usuarios"))
+    # PERMIÇÔES: ADMIN=TODOS COMUM=SELF
+    eh_proprio = session.get("usuario_id") == usuario.id
+    if not _eh_admin and not eh_proprio:
+        flash("Você só pode editar o seu próprio perfil!", "erro")
+        return redirect(url_for("usuario.listar_usuarios"))
+    
+    if request.method == "GET":
+        return render_template("editar_usuario.html", ususario=usuario)
+    
+    try:
+        idade = int(request.form.get("idade", 0))
+    except ValueError:
+        flash("Idade inválida!", "erro")
+        return redirect(url_for("usuario.editar_usuario", cpf=cpf))
+
+    if idade < 18:
+        flash("Usuário de ser maior de 18 anos!", "erro")
+        return redirect(url_for("usuario.editar_usuario", cpf=cpf))
+    
+    usuario.nome = request.form.get("nome", "").strip()
+    usuario.email = request.form.get("email", "").strip()
+    usuario.idade = idade
+
+    senha = request.form.get("senha", "")
+    if senha:
+        usuario.senha = generate_password_hash(senha)
+
+    if repo.atualizar(usuario):
+        flash("Usuário atualizado com sucesso!", "sucesso")
+    else:
+        flash("Erro ao autualizar o usuário!", "erro")
+ 
+    return redirect(url_for("usuario.listar_usuarios"))
+
 # EXCLUSÂO
 @usuario_bp.route("/usuarios/deletar", methods=["POST"])
 def deletar_usuario():

@@ -47,6 +47,10 @@ def cadastrar_usuario():
     if repo.cpf_existe(cpf_limpo):
         flash("CPF já cadastrado!", "erro")
         return redirect(url_for("auth.cadastrar_usuario"))
+#A TRAVA DE SEGURANÇA VEM PRIMEIRO!
+    if not senha:
+        flash("A senha é obrigatória!", "erro")
+        return redirect(url_for("auth.cadastrar_usuario"))
 # CRIAÇÂO  OBJETO DE PERSISTENCIA
     senha_hash = generate_password_hash(senha_hash)
     cpf_salvo = sanitizar_cpf(cpf_limpo)
@@ -79,8 +83,8 @@ def login():
     
     return render_template("login.html")
 # LOGOUT
-auth_bp.route("/logout")
+@auth_bp.route("/logout")
 def logout():
-    session.clear()
-    flash("Logout realizado com sucesso!", "sucesso")
+    session.clear() 
+    flash("Você saiu da sua conta com sucesso.", "sucesso")
     return redirect(url_for("auth.login"))
