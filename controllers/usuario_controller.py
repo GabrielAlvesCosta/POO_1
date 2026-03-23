@@ -9,7 +9,7 @@ usuario_bp = Blueprint("auth", __name__)
 repo = RepositorioUsuarios()
 
 def _usuario_logado() -> bool:
-    return "usuario_id" in session
+    return "id" in session
 
 def _eh_admin() -> bool:
     return session.get("usuaruo_cargo") == "admin"

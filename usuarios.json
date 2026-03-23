@@ -1,5 +1,6 @@
 [
     {
+<<<<<<< Updated upstream
         "id": "1e1c9354-ac6d-4495-8d77-2d21276fe73d",
         "nome": "Gabr",
         "cpf": "08808494446",
@@ -105,6 +106,23 @@
         "email": "gollumalvescosta@gmail.com",
         "idade": 18,
         "senha": "scrypt:32768:8:1$WGUyYl3q81rgnO9E$3068fc8e667b81f33bace3abae3a311c7eb48c7f6165b924607c35cd40cf803e90a5117ca283307585669b7be3034b64e6568aa8fe178bb71768c1fe15f1a8a3",
+=======
+        "id": "208a34d1-7ceb-45b6-be75-0060d7e3fcf5",
+        "nome": "Gabriel",
+        "cpf": "19420827038",
+        "email": "gollumalvescosta@gmail.com",
+        "idade": 18,
+        "senha": "scrypt:32768:8:1$iO3rgWqITImG6H3M$8a6d8ed04e8a5cb340a988b96690e10ee05b21c4d295b8e2eadfb936c8609a2e3231cce4bb1b3a37cf6bafce2d04c45b8feec968eb251357c6662efb311fa27b",
+        "cargo": "admin"
+    },
+    {
+        "id": "3b37d4e3-11c2-47d4-8189-de29b2f959d9",
+        "nome": "Gabriel",
+        "cpf": "08808494446",
+        "email": "gollumalvescosta@gmail.com",
+        "idade": 545,
+        "senha": "scrypt:32768:8:1$mktuV9L4MVEEr80y$030f1e0ce626ad3117aaf5c3a4ee541a62c52be3c80847aa569681ff4fb35de3985889609baa1aacad43876ef94df61d8ae01b4caedfb543919e94278efe975c",
+>>>>>>> Stashed changes
         "cargo": "admin"
     }
 ]

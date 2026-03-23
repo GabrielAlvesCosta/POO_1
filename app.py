@@ -4,8 +4,13 @@ import os
 from werkzeug.security import generate_password_hash, check_password_hash
 import re
 from controllers.auth_controller import auth_bp
+<<<<<<< Updated upstream
 
 
+=======
+from controllers.usuario_controller import usuario_bp
+# chave necessária para utilizar `flash` e sessões
+>>>>>>> Stashed changes
 app = Flask(__name__)
 # chave necessária para utilizar `flash` e sessões
 app.secret_key = "chave-super-secreta"

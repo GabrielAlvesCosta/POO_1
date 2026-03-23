@@ -40,9 +40,17 @@ def cadastrar_usuario():
         flash("Cadastro apenas para maiores de idade!", "erro")
         return redirect(url_for("auth.cadastrar_usuario"))
 # VALIDAR CPF
+<<<<<<< Updated upstream
     if not validar_formato_cpf(cpf_limpo):
         flash("CPF invalido! Use o formato: 000.000.000-00", "erro")
         return redirect(url_for("auth.cadastrar_usuario"))
+=======
+        if not validar_formato_cpf(cpf):
+            flash("CPF invalido! Use o formato: 000.000.000-00", "erro")
+            return redirect(url_for("auth.cadastrar_usuario"))
+        
+        cpf_limpo = sanitizar_cpf(cpf)
+>>>>>>> Stashed changes
 # UNICIDADE DO CPF
     if repo.cpf_existe(cpf_limpo):
         flash("CPF já cadastrado!", "erro")
@@ -75,7 +83,11 @@ def login():
             flash(f"Bem-vindo, {usuario.nome}!", "sucesso")
             return redirect(url_for("usuario.listar_usuarios"))
         
+<<<<<<< Updated upstream
     flash("CPF ou Senha inválidos!", "erro")
+=======
+        flash("CPF ou Senha inválidos!", "erro")
+>>>>>>> Stashed changes
     
     return render_template("login.html")
 # LOGOUT
