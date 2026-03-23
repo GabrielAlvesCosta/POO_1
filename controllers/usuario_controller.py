@@ -2,7 +2,6 @@ from flask import Blueprint, render_template, request, jsonify, redirect, url_fo
 from werkzeug.security import generate_password_hash
 
 from models.repositorio import RepositorioUsuarios
-from utils.validacoes import sanitizar_cpf
 
 usuario_bp = Blueprint("auth", __name__)
 
