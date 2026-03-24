@@ -4,7 +4,6 @@ import re
 # VEM DOS MODELS
 from models.usuario import Usuario 
 from models.repositorio import RepositorioUsuarios
-from models.validacao_usuario import ValidacaoCadastro
 from utils.validacoes import validar_formato_cpf, sanitizar_cpf
 # BLUEPRINT agrupa rotas
 auth_bp = Blueprint("auth", __name__)
@@ -20,14 +19,11 @@ def cadastrar_usuario():
     if request.method == "GET":
         return render_template("cadastro-usuario.html")
     
-    dados = request.form
     nome = request.form.get("nome")
-    cpf_sujo = dados.get("cpf")
-    cpf_limpo = re.sub(r'\D', '', cpf_sujo)
+    cpf= request.form.get("cpf")
     email = request.form.get("email")
     idade = request.form.get("idade")
     senha = request.form.get("senha")
-    senha_hash = generate_password_hash(senha)
     cargo = request.form.get("cargo", "comum")
 # VALOR IDADE
     try:
@@ -40,11 +36,11 @@ def cadastrar_usuario():
         flash("Cadastro apenas para maiores de idade!", "erro")
         return redirect(url_for("auth.cadastrar_usuario"))
 # VALIDAR CPF
-    if not validar_formato_cpf(cpf_limpo):
+    if not validar_formato_cpf(cpf):
         flash("CPF invalido! Use o formato: 000.000.000-00", "erro")
         return redirect(url_for("auth.cadastrar_usuario"))
 # UNICIDADE DO CPF
-    if repo.cpf_existe(cpf_limpo):
+    if repo.cpf_existe(cpf):
         flash("CPF já cadastrado!", "erro")
         return redirect(url_for("auth.cadastrar_usuario"))
 #A TRAVA DE SEGURANÇA VEM PRIMEIRO!
@@ -52,19 +48,19 @@ def cadastrar_usuario():
         flash("A senha é obrigatória!", "erro")
         return redirect(url_for("auth.cadastrar_usuario"))
 # CRIAÇÂO  OBJETO DE PERSISTENCIA
-    senha_hash = generate_password_hash(senha_hash)
-    cpf_salvo = sanitizar_cpf(cpf_limpo)
+    senha_hash = generate_password_hash(senha)
+    cpf_salvo = sanitizar_cpf(cpf)
 
     novo_usuario = Usuario(nome, cpf_salvo, email, idade, senha_hash, cargo)
 
-    if repo.salva(novo_usuario):
+    if repo.salvar(novo_usuario):
         flash("Usuário Cadastrado com Sucesso!", "sucesso")
         return redirect(url_for("auth.login"))
     else:
         flash("Não foi possível cadastrar o Usuário!", "erro")
         return redirect(url_for("auth.cadastrar_usuario"))
 # LOGIN
-auth_bp.route("/login", methods=["GET", "POST"])
+@auth_bp.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         cpf_digitado = sanitizar_cpf(request.form.get("cpf", ""))
@@ -76,10 +72,11 @@ def login():
             session["id"] = usuario.id
             session["nome"] = usuario.nome
             session["cargo"] = usuario.cargo
+            session['cpf'] = usuario.cpf
             flash(f"Bem-vindo, {usuario.nome}!", "sucesso")
             return redirect(url_for("usuario.listar_usuarios"))
         
-    flash("CPF ou Senha inválidos!", "erro")
+        flash("CPF ou Senha inválidos!", "erro")
     
     return render_template("login.html")
 # LOGOUT

@@ -42,7 +42,7 @@
     
 <form action="{{ url_for('usuario.listar_usuarios') }}" method="GET" style="display: inline-block; margin-top: 10px;">
                 <input type="text" 
-                       name="termo" 
+                       name="q" 
                        placeholder="Buscar por nome ou CPF" 
                        value="{{ busca if busca else '' }}"
                        class="search-form"
@@ -72,14 +72,14 @@
                     <td>
                         <div class="acoes">
                             
-                            {% if session.get('cargo') == 'admin' or session.get('usuario_cpf')|string == usuario.cpf|string %}
+                            {% if session.get('cargo') == 'admin' or session.get('cpf')|string == usuario.cpf|string %}
                                 
-                                <a href="{{ url_for('editar_usuario', cpf=usuario.cpf) }}">
+                                <a href="{{ url_for('usuario.editar_usuario', cpf=usuario.cpf) }}">
                                     <button type="button" class="btn-editar">Editar</button>
                                 </a>
 
                                 {% if session.get('cargo') == 'admin' %}
-                                    <form action="{{ url_for('deletar_usuario') }}"
+                                    <form action="{{ url_for('usuario.deletar_usuario') }}"
                                           method="post"
                                           onsubmit="return confirm('Tem certeza que deseja deletar este usuário?');"
                                           style="display: inline;">

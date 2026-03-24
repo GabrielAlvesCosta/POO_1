@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash
 
 from models.repositorio import RepositorioUsuarios
 
-usuario_bp = Blueprint("auth", __name__)
+usuario_bp = Blueprint("usuario", __name__)
 
 repo = RepositorioUsuarios()
 
@@ -11,7 +11,7 @@ def _usuario_logado() -> bool:
     return "id" in session
 
 def _eh_admin() -> bool:
-    return session.get("usuaruo_cargo") == "admin"
+    return session.get("cargo") == "admin"
 # LISTAGEM
 @usuario_bp.route("/usuarios", methods=["GET"])
 def listar_usuarios():
@@ -50,11 +50,11 @@ def listar_usuarios_json():
     return jsonify({u.to_ditc() for u in usuarios})
 
 # EDIÇÂO
-@usuario_bp.route("/usuario/editar<cpf>", methods=["GET", "POST"])
-def editar_usuario():
+@usuario_bp.route("/usuario/editar/<cpf>", methods=["GET", "POST"])
+def editar_usuario(cpf):
     if not _usuario_logado():
         flash("Não autorizado!", "erro")
-        return redirect(url_for("auth_login"))
+        return redirect(url_for("auth.login"))
     
     usuario = repo.buscar_por_cpf(cpf)
 
@@ -62,13 +62,16 @@ def editar_usuario():
         flash("Usuário não encontrado", "erro")
         return redirect(url_for("usuario.listar_usuarios"))
     # PERMIÇÔES: ADMIN=TODOS COMUM=SELF
-    eh_proprio = session.get("usuario_id") == usuario.id
+    _eh_admin = session.get("cargo") == "admin"
+
+    eh_proprio = session.get("cpf") == usuario.cpf
+    
     if not _eh_admin and not eh_proprio:
         flash("Você só pode editar o seu próprio perfil!", "erro")
         return redirect(url_for("usuario.listar_usuarios"))
     
     if request.method == "GET":
-        return render_template("editar_usuario.html", ususario=usuario)
+        return render_template("editar_usuario.html", usuario=usuario)
     
     try:
         idade = int(request.form.get("idade", 0))

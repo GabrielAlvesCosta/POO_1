@@ -1,11 +1,29 @@
 [
     {
-        "id": "30560450-5800-44e5-9d82-01673d358f7b",
+        "id": "6ad59914-b503-40dd-a096-454f3d2dc1b6",
         "nome": "Gabriel",
-        "cpf": "61738969401",
+        "cpf": "08808494446",
         "email": "gollumalvescosta@gmail.com",
-        "idade": 18,
-        "senha": "scrypt:32768:8:1$p71XFUWmfwn9h3QH$5795e8aa64b1b94f096b1f8d1a41acbff4a9e13941e6d097d1e6acfdd3187599a9bdac461932d1d9ce2f25903cd790ba16de2d3ce7915a20128cf6b3ef8c7eab",
+        "idade": 19,
+        "senha": "scrypt:32768:8:1$GWWzfZ2OzGLpt3sp$85c6157c76c27fe44cc6b5cb4eab02ad4c1225a0831181c2ccc7ae032634652ce2d9cbed337b1615dfdb0f1a626bd22c1dcbd7986a584dcea37141e8ab817f01",
+        "cargo": "admin"
+    },
+    {
+        "id": "366d6cee-7c4a-4c8b-a78a-b9bdb19d5a9f",
+        "nome": "Kabriel",
+        "cpf": "08808494444",
+        "email": "gollumalvescosta@gmail.com",
+        "idade": 100,
+        "senha": "scrypt:32768:8:1$EwSCHFBQholvtR0v$3197ca474a155e29c9d9e05107f1c0993b57a4ca33cd1f2af50326dea10fa3193df9e2c395c3f5cb90414d2cb7de5fa7d36e402beaf20ea43edc4c6d65fd350f",
+        "cargo": "comum"
+    },
+    {
+        "id": "def18b29-0778-452c-bd7a-ab9299502410",
+        "nome": "Janaina",
+        "cpf": "02178756450",
+        "email": "gollumalvescosta@gmail.com",
+        "idade": 21,
+        "senha": "scrypt:32768:8:1$Dxkjs7Rz4izv5yYW$8a276f3cfacbb8c72912639f9463dd6f21ee44b314fd77cbcf98c54c0d4bd1e5b9e4663866fe9f7b5eaed9fd8dee44bfda94c82d5a74da616b1cdfd05b0e4857",
         "cargo": "comum"
     }
 ]
