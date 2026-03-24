@@ -20,7 +20,7 @@
       {% endif %}
     {% endwith %}
 </div>
-    <form action="/cadastro-usuario" method="POST">
+    <form action="{{ url_for('auth.cadastrar_usuario') }}" method="POST">
 
         <h2>Cadastro de Usuário</h2>
 
@@ -60,7 +60,7 @@
 
         <button type="submit">Cadastrar</button><br><br>
         
-        <a href="{{ url_for('home') }}">Voltar para início</a>
+        <a href="{{ url_for('auth.home') }}">Voltar para início</a>
 
     </form>
 

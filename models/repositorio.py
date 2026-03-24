@@ -10,7 +10,7 @@ class RepositorioUsuarios:
 #-----Leitura-------------
     def listar(self) -> list[Usuario]:
         try:
-            if not os.path.exist(self.ARQUIVO):
+            if not os.path.exists(self.ARQUIVO):
                 return []
             with open(self.ARQUIVO, "r", encoding="utf-8") as f:
                 dados = json.load(f)
@@ -45,7 +45,7 @@ class RepositorioUsuarios:
             for i, u in enumerate(usuarios):
                 if sanitizar_cpf(u.cpf) == cpf_alvo:
                     usuarios[i] = usuario_atualizado
-                    self.persistir(usuarios)
+                    self._persistir(usuarios)
                     return True
             return False
         except Exception:
